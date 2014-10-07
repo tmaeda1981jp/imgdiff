@@ -1,6 +1,8 @@
 /*jslint white: true, nomen: true, maxlen: 120, plusplus: true, node:true, */
 /*global _:false, */
 
+'use strict';
+
 var fs   = require('fs'),
     path = require('path'),
     gm   = require('gm'),
@@ -63,7 +65,7 @@ var walk = function(correctDir, compareDir) {
         else {
           if (_.contains(['.jpg', '.gif', '.png', '.ico'], path.extname(file))) {
             gm.compare(correct, compare, {
-              file: 'diff/diff-%s'.format(compare.split('/').join('_')),
+              file: 'diff/diff-%s'.format(compare.split('/').join('-')),
               highlightColor: 'red',
               tolerance: 0.02
             }, function(err, isEqual, equality, raw) {
