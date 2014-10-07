@@ -1,8 +1,6 @@
 /*jslint white: true, nomen: true, maxlen: 120, plusplus: true, node:true, */
 /*global _:false, */
 
-'use strict';
-
 var fs   = require('fs'),
     path = require('path'),
     gm   = require('gm'),
@@ -21,14 +19,18 @@ var help = function() {
     '<COMPARE_IMG_DIR_PATH>'.underline,
     '\n'
   ].join(' ');
-  // return 'Usage: \n\n  node imgdiff.js <CORRECT_IMG_DIRECTORY_PATH> <COMPARE_IMG_DIRECTORY_PATH>\n';
 };
 
 var error = function(message) {
-  return [
-    '[ERROR]'.red,
-    message
-  ].join(' ');
+  return [ '[ERROR]'.red, message ].join(' ');
+};
+
+var success = function(file) {
+  return [ '[OK]'.green, file ].join(' ');
+};
+
+var fail = function(file) {
+  return [ '[NG]'.red, file ].join(' ');
 };
 
 // 1. check param
@@ -48,18 +50,36 @@ args.forEach(function(dirname, index) {
   });
 });
 
+var walk = function(correctDir, compareDir) {
+  fs.readdir(correctDir, function(err, list) {
+    list.forEach(function(file) {
+      var correct = path.join(correctDir, file),
+          compare = path.join(compareDir, file); // TODO check exist
 
-
-
-
-// gm.compare('1.png', 'compare.png', {
-//   file: 'diff.png',
-//   highlightColor: 'red',
-//   tolerance: 0.02
-// }, function(err, isEqual, equality, raw, path1, path2) {
-//   console.log(arguments);
-//   console.log('The images were equal: %s', isEqual);
-// });
-
-
-
+      fs.stat(correct, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(correct, compare);
+        }
+        else {
+          if (_.contains(['.jpg', '.gif', '.png', '.ico'], path.extname(file))) {
+            gm.compare(correct, compare, {
+              file: 'diff/diff-%s'.format(compare.split('/').join('_')),
+              highlightColor: 'red',
+              tolerance: 0.02
+            }, function(err, isEqual, equality, raw) {
+              fs.exists(compare, function(exists) {
+                if (!exists) {
+                  console.log(fail(compare + ' (file not found)'));
+                }
+                else {
+                  console.log(isEqual ? success(compare) : fail(compare));
+                }
+              });
+            });
+          }
+        }
+      });
+    });
+  });
+};
+walk(args[0], args[1]);
