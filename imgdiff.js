@@ -122,21 +122,33 @@ walk(
           <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
         </head>
         <body>
-          <div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>比較元</th>
+                <th>比較対象</th>
+              </tr>
+            </thead>
+            <tbody>
       */});
 
       body = ngImages.map(function(ng) {
         return [
-          '<h4>比較元画像: %s</h4>'.format(ng.correct),
-          '<img src="%s" style="max-width:500px;" />'.format(ng.correct),
-          '<h4>比較対象画像: %s</h4>'.format(ng.compare),
-          '<img src="%s" style="max-width:500px;" />'.format(ng.compare),
-          '<hr>'
+          '            <tr>',
+          '              <td>%s</td>'.format(ng.correct),
+          '              <td>%s</td>'.format(ng.compare),
+          '            </tr>',
+          '            <tr>',
+          '              <td><img src="%s" style="max-width:500px;" /></td>'.format(ng.correct),
+          '              <td><img src="%s" style="max-width:500px;" /></td>'.format(ng.compare),
+          '            </tr>',
+          ''
         ].join('\n');
       }).join('\n');
 
       tplFooter = doc(function() {/*
-          </div>
+            </tbody>
+          </table>
           <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
           <script src="http://cdn.jsdelivr.net/underscorejs/1.7.0/underscore-min.js"></script>
         </body>
