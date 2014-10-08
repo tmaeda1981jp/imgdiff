@@ -44,9 +44,10 @@ if (args.length !== 2) {
 
 // 2. check directory exists
 args.forEach(function(dirPath) {
-  fs.exists(dirPath, function(exists) {
+  var abspath = path.resolve(path.join(dirPath));
+  fs.exists(abspath, function(exists) {
     if (!exists) {
-      console.log(error('%s is not found.').format(dirPath));
+      console.log(error('%s is not found.').format(abspath));
       process.exit(1);
     }
   });
@@ -98,59 +99,61 @@ var walk = function(correctDir, compareDir, done) {
   });
 };
 
-walk(args[0], args[1], function(err, ngImages) {
-  var tplHeader, tplFooter, body;
+walk(
+  path.resolve(path.join(args[0])),
+  path.resolve(path.join(args[1])),
+  function(err, ngImages) {
+    var tplHeader, tplFooter, body;
 
-  if (ngImages.length === 0) {
-    console.log('\nNo difference images!\n'.green);
-  }
-  else {
-    console.log('\n%d difference images.'.format(ngImages.length).red);
+    if (ngImages.length === 0) {
+      console.log('\nNo difference images!\n'.green);
+    }
+    else {
+      console.log('\n%d difference images.'.format(ngImages.length).red);
 
-    tplHeader = doc(function() {/*
-    <!DOCTYPE html>
-    <html lang="ja">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <title>imgdiff result</title>
-        <meta name="keywords" content="">
-        <meta name="description" content="">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-        <!--
-        <link rel="stylesheet" href="css/main.css" media="all" />
-        -->
-      </head>
-      <body>
-        <div>
-    */});
+      tplHeader = doc(function() {/*
+      <!DOCTYPE html>
+      <html lang="ja">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+          <title>imgdiff result</title>
+          <meta name="keywords" content="">
+          <meta name="description" content="">
+          <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+          <!--
+          <link rel="stylesheet" href="css/main.css" media="all" />
+          -->
+        </head>
+        <body>
+          <div>
+      */});
 
-    body = ngImages.map(function(ng) {
-      return [
-        '<h4>比較元画像: %s</h4>'.format(ng.correct),
-        '<img src="%s" style="max-width:500px;" />'.format(ng.correct),
-        '<h4>比較対象画像: %s</h4>'.format(ng.compare),
-        '<img src="%s" style="max-width:500px;" />'.format(ng.compare),
-        '<hr>'
-      ].join('\n');
-    }).join('\n');
+      body = ngImages.map(function(ng) {
+        return [
+          '<h4>比較元画像: %s</h4>'.format(ng.correct),
+          '<img src="%s" style="max-width:500px;" />'.format(ng.correct),
+          '<h4>比較対象画像: %s</h4>'.format(ng.compare),
+          '<img src="%s" style="max-width:500px;" />'.format(ng.compare),
+          '<hr>'
+        ].join('\n');
+      }).join('\n');
 
-    tplFooter = doc(function() {/*
-        </div>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="http://cdn.jsdelivr.net/underscorejs/1.7.0/underscore-min.js"></script>
-      </body>
-    </html>
-    */});
+      tplFooter = doc(function() {/*
+          </div>
+          <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+          <script src="http://cdn.jsdelivr.net/underscorejs/1.7.0/underscore-min.js"></script>
+        </body>
+      </html>
+      */});
 
-    fs.writeFile(
-      './result/result-' + new Date().getTime() + '.html',
-      tplHeader + body + tplFooter,
-      'utf8',
-      function(err) {
-        if(err) console.log(err);
-      }
-    );
-  }
-});
-
+      fs.writeFile(
+        './result/result-' + new Date().getTime() + '.html',
+        tplHeader + body + tplFooter,
+        'utf8',
+        function(err) {
+          if(err) console.log(err);
+        }
+      );
+    }
+  });
