@@ -110,7 +110,6 @@ walk(
     }
     else {
       console.log('\n%d difference images.'.format(ngImages.length).red);
-
       tplHeader = doc(function() {/*
       <!DOCTYPE html>
       <html lang="ja">
@@ -121,9 +120,6 @@ walk(
           <meta name="keywords" content="">
           <meta name="description" content="">
           <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-          <!--
-          <link rel="stylesheet" href="css/main.css" media="all" />
-          -->
         </head>
         <body>
           <div>
