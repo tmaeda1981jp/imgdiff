@@ -28,11 +28,11 @@ var error = function(message) {
 };
 
 var success = function(file) {
-  return [ '[OK]'.green, file ].join(' ');
+  return [ '✓'.green, file ].join(' ');
 };
 
 var fail = function(file) {
-  return [ '[NG]'.red, file ].join(' ');
+  return [ '✗'.red, file ].join(' ');
 };
 
 // 1. check param
@@ -42,8 +42,7 @@ if (args.length !== 2) {
 }
 
 // 2. check directory exists
-args.forEach(function(dirname, index) {
-  var dirPath = path.join(__dirname, dirname);
+args.forEach(function(dirPath) {
   fs.exists(dirPath, function(exists) {
     if (!exists) {
       console.log(error('%s is not found.').format(dirPath));
