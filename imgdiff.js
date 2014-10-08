@@ -105,6 +105,8 @@ walk(args[0], args[1], function(err, ngImages) {
     console.log('\nNo difference images!\n'.green);
   }
   else {
+    console.log('\n%d difference images.'.format(ngImages.length).red);
+
     tplHeader = doc(function() {/*
     <!DOCTYPE html>
     <html lang="ja">
