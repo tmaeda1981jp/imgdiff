@@ -51,6 +51,7 @@ args.forEach(function(dirPath) {
   });
 });
 
+// var ngImages = [];
 var walk = function(correctDir, compareDir) {
   fs.readdir(correctDir, function(err, list) {
     list.forEach(function(file) {
@@ -64,8 +65,8 @@ var walk = function(correctDir, compareDir) {
         else {
           if (_.contains(['.jpg', '.gif', '.png', '.ico'], path.extname(file))) {
             gm.compare(correct, compare, {
-              file: 'diff/diff-%s'.format(compare.split('/').join('-')),
-              highlightColor: 'red',
+//              file: 'diff/diff-%s'.format(compare.split('/').join('-')),
+//              highlightColor: 'red',
               tolerance: 0.02
             }, function(err, isEqual, equality, raw) {
               fs.exists(compare, function(exists) {
@@ -74,6 +75,12 @@ var walk = function(correctDir, compareDir) {
                 }
                 else {
                   console.log(isEqual ? success(compare) : fail(compare));
+                  // if (!isEqual) {
+                  //   ngImages.push({
+                  //     correct: correct,
+                  //     comprae: compare
+                  //   });
+                  // }
                 }
               });
             });
@@ -84,3 +91,4 @@ var walk = function(correctDir, compareDir) {
   });
 };
 walk(args[0], args[1]);
+
