@@ -4,7 +4,7 @@ A command-line tool to detect the difference between images.
 It supports only for **OSX**.
 
 ## Install
-P
+
 ```bash
 $ git clone git@github.com:tmaeda1981jp/imgdiff.git
 $ cd imgdiff
