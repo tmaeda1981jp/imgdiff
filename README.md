@@ -3,10 +3,18 @@
 ## Install
 
 ```bash
-$ brew install imagemagick graphicsmagick
 $ git clone git@github.com:tmaeda1981jp/imgdiff.git
 $ cd imgdiff
 $ npm install
+```
+
+## Dependencies
+
+- imagemagick
+- graphicsmagic
+
+```bash
+$ brew install imagemagick graphicsmagick
 ```
 
 ## Usage
